@@ -17,7 +17,7 @@ app.get("/", (req, res) => {
 app.post("/signup", async (req, res) => {
   const username = req.body.username,
     email = req.body.email,
-    password = await argon2.hash(req.body.password);
+    password = req.body.password;
 
   const parsedPayload = userSignup.safeParse({ username, email, password });
 
@@ -27,7 +27,12 @@ app.post("/signup", async (req, res) => {
     });
     return;
   }
+
+  //hash the password
+  const hashPassword = await argon2.hash(password);
+
   try {
+    //check if username or email exists
     if ((await user.findOne({ username })) || (await user.findOne({ email }))) {
       res.status(411).json({
         msg: "username or email already exists",
@@ -35,10 +40,11 @@ app.post("/signup", async (req, res) => {
       return;
     }
 
+    //create new user
     await user.create({
       username: username,
       email: email,
-      password: password,
+      password: hashPassword,
     });
 
     res.status(200).json({
@@ -64,7 +70,7 @@ app.post("/signin", async (req, res) => {
   }
   try {
     const findUser = await user.findOne({ username });
-
+    //check if user exists
     if (!findUser) {
       res.status(411).json({
         msg: "user does not exist",
@@ -72,6 +78,7 @@ app.post("/signin", async (req, res) => {
       return;
     }
 
+    //match password with hashPassword
     if (!(await argon2.verify(findUser.password, password))) {
       res.status(411).json({
         msg: "incorrect password",
