@@ -1,9 +1,13 @@
 const zod = require("zod");
 
 const userSignup = zod.object({
-  username: zod.string().max(10, { msg: "Must be 5 or fewer characters long" }),
+  username: zod.string().max(20, { msg: "Must be 5 or fewer characters long" }),
   email: zod.string().email({ msg: "Invalid email address" }),
   password: zod.string(),
 });
+const userSignin = zod.object({
+  username: zod.string().max(20, { msg: "Must be 5 or fewer characters long" }),
+  password: zod.string(),
+});
 
-module.exports = { userSignup };
+module.exports = { userSignup, userSignin };
