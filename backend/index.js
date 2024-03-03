@@ -27,23 +27,27 @@ app.post("/signup", async (req, res) => {
     });
     return;
   }
+  try {
+    if ((await user.findOne({ username })) || (await user.findOne({ email }))) {
+      res.status(411).json({
+        msg: "username or email already exists",
+      });
+      return;
+    }
 
-  if ((await user.findOne({ username })) && (await user.findOne({ email }))) {
-    res.status(411).json({
-      msg: "username or email already exists",
+    await user.create({
+      username: username,
+      email: email,
+      password: password,
     });
+
+    res.status(200).json({
+      msg: "signup successful",
+    });
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
     return;
   }
-
-  await user.create({
-    username: username,
-    email: email,
-    password: password,
-  });
-
-  res.status(200).json({
-    msg: "signup successful",
-  });
 });
 
 app.post("/signin", async (req, res) => {
@@ -58,26 +62,30 @@ app.post("/signin", async (req, res) => {
     });
     return;
   }
+  try {
+    const findUser = await user.findOne({ username });
 
-  const findUser = await user.findOne({ username });
+    if (!findUser) {
+      res.status(411).json({
+        msg: "user does not exist",
+      });
+      return;
+    }
 
-  if (!findUser) {
-    res.status(411).json({
-      msg: "user does not exist",
+    if (!(await argon2.verify(findUser.password, password))) {
+      res.status(411).json({
+        msg: "incorrect password",
+      });
+      return;
+    }
+
+    res.status(200).json({
+      msg: "sign in successful",
     });
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
     return;
   }
-
-  if (!(await argon2.verify(findUser.password, password))) {
-    res.status(411).json({
-      msg: "incorrect password",
-    });
-    return;
-  }
-
-  res.status(200).json({
-    msg: "signin successful",
-  });
 });
 
 app.get("/post", async (req, res) => {
