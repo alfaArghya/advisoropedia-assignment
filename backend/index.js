@@ -1,11 +1,13 @@
 const express = require("express");
 const argon2 = require("argon2");
+const cors = require("cors");
 const app = express();
 
 const { user, post } = require("./db");
 const { userSignup, userSignin } = require("./types");
 
 app.use(express.json());
+app.use(cors());
 const port = 3000;
 
 app.get("/", (req, res) => {
