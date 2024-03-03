@@ -7,6 +7,7 @@ const { userSignup, userSignin } = require("./types");
 
 app.use(express.json());
 const port = 3000;
+
 app.get("/", (req, res) => {
   res.send(`<h3>Server is up<h3/>`);
 });
@@ -78,7 +79,6 @@ app.post("/signin", async (req, res) => {
 });
 
 app.get("/post", async (req, res) => {
-  s;
   res.send(`<h3>My posts<h3/>`);
 });
 
