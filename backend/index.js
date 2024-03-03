@@ -79,7 +79,15 @@ app.post("/signin", async (req, res) => {
 });
 
 app.get("/post", async (req, res) => {
-  res.send(`<h3>My posts<h3/>`);
+  try {
+    const posts = await post
+      .find()
+      .skip(req.body.skipCount * 5)
+      .limit(5);
+    res.status(200).json({ posts });
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 app.listen(port, () => {
