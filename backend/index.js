@@ -1,14 +1,28 @@
 const express = require("express");
 const argon2 = require("argon2");
 const cors = require("cors");
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
+
 const app = express();
+dotenv.config();
 
 const { user, post } = require("./db");
 const { userSignup, userSignin } = require("./types");
 
 app.use(express.json());
 app.use(cors());
+
 const port = 3000;
+const jwtPassword = process.env.JWTPassword;
+
+const findUser = async (username) => {
+  return await user.findOne({ username });
+};
+const jwtTokenGenerate = (username) => {
+  const token = jwt.sign({ username: username }, jwtPassword);
+  return token;
+};
 
 app.get("/", (req, res) => {
   res.send(`<h3>Server is up<h3/>`);
@@ -33,7 +47,7 @@ app.post("/signup", async (req, res) => {
 
   try {
     //check if username or email exists
-    if ((await user.findOne({ username })) || (await user.findOne({ email }))) {
+    if (findUser(username) || (await user.findOne({ email }))) {
       res.status(411).json({
         msg: "username or email already exists",
       });
@@ -47,9 +61,12 @@ app.post("/signup", async (req, res) => {
       password: hashPassword,
     });
 
+    const token = jwtTokenGenerate(username);
     res.status(200).json({
       msg: "signup successful",
+      token,
     });
+    return;
   } catch (err) {
     res.status(500).json({ error: "Internal server error" });
     return;
@@ -68,10 +85,10 @@ app.post("/signin", async (req, res) => {
     });
     return;
   }
+
   try {
-    const findUser = await user.findOne({ username });
     //check if user exists
-    if (!findUser) {
+    if (!findUser(username)) {
       res.status(411).json({
         msg: "user does not exist",
       });
@@ -86,9 +103,12 @@ app.post("/signin", async (req, res) => {
       return;
     }
 
+    const token = jwtTokenGenerate(username);
     res.status(200).json({
       msg: "sign in successful",
+      token,
     });
+    return;
   } catch (err) {
     res.status(500).json({ error: "Internal server error" });
     return;
@@ -96,14 +116,23 @@ app.post("/signin", async (req, res) => {
 });
 
 app.get("/post", async (req, res) => {
+  const token = req.headers.authorization;
   try {
+    const decoded = jwt.verify(token, jwtPassword);
+    const username = decoded.username;
+
+    if (!findUser(username)) {
+      res.status(411).json({ error: "user does not exists" });
+      return;
+    }
     const posts = await post
       .find()
       .skip(req.body.skipCount * 5)
       .limit(5);
     res.status(200).json({ posts });
+    return;
   } catch (err) {
-    res.status(500).json({ error: "Internal server error" });
+    res.status(403).json({ msg: "Invalid Token" });
   }
 });
 
