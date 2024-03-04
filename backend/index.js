@@ -13,12 +13,10 @@ const { userSignup, userSignin } = require("./types");
 app.use(express.json());
 app.use(cors());
 
-const port = 3000;
-const jwtPassword = process.env.JWTPassword;
+const port = 3000; //port number
+const jwtPassword = process.env.JWTPassword; // private key
 
-const findUser = async (username) => {
-  return await user.findOne({ username });
-};
+//jwt token generator
 const jwtTokenGenerate = (username) => {
   const token = jwt.sign({ username: username }, jwtPassword);
   return token;
@@ -28,13 +26,13 @@ app.get("/", (req, res) => {
   res.send(`<h3>Server is up<h3/>`);
 });
 
+//signup route
 app.post("/signup", async (req, res) => {
   const username = req.body.username,
     email = req.body.email,
     password = req.body.password;
 
   const parsedPayload = userSignup.safeParse({ username, email, password });
-
   if (!parsedPayload.success) {
     res.status(411).json({
       msg: "wrong inputs",
@@ -47,7 +45,8 @@ app.post("/signup", async (req, res) => {
 
   try {
     //check if username or email exists
-    if (findUser(username) || (await user.findOne({ email }))) {
+    // console.log(findUser(username));
+    if ((await user.findOne({ username })) || (await user.findOne({ email }))) {
       res.status(411).json({
         msg: "username or email already exists",
       });
@@ -73,6 +72,7 @@ app.post("/signup", async (req, res) => {
   }
 });
 
+//sign in route
 app.post("/signin", async (req, res) => {
   const username = req.body.username,
     password = req.body.password;
@@ -88,7 +88,8 @@ app.post("/signin", async (req, res) => {
 
   try {
     //check if user exists
-    if (!findUser(username)) {
+    const findUser = await user.findOne({ username });
+    if (!findUser) {
       res.status(411).json({
         msg: "user does not exist",
       });
@@ -115,16 +116,20 @@ app.post("/signin", async (req, res) => {
   }
 });
 
+//posts route
 app.get("/post", async (req, res) => {
   const token = req.headers.authorization;
   try {
+    //decode jwt token
     const decoded = jwt.verify(token, jwtPassword);
     const username = decoded.username;
 
-    if (!findUser(username)) {
+    if (!(await user.findOne({ username }))) {
       res.status(411).json({ error: "user does not exists" });
       return;
     }
+
+    //get posts from DB
     const posts = await post
       .find()
       .skip(req.body.skipCount * 5)
