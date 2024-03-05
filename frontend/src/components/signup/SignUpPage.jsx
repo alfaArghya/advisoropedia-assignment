@@ -1,7 +1,23 @@
+import Axios from "axios";
 import { useState } from "react";
 import Alert from "./Alert";
 
 const SignUpPage = () => {
+  Axios.post("http://localhost:3000/signup", {
+    name: "User 13",
+    username: "user13",
+    email: "user13@example.com",
+    password: "user13@example",
+  })
+    .then((res) => {
+      console.log(`res`);
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.log(`err`);
+      console.log(err.response.data);
+    });
+
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
