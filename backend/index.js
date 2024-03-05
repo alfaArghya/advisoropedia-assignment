@@ -28,13 +28,20 @@ app.get("/", (req, res) => {
 
 //signup route
 app.post("/signup", async (req, res) => {
-  const username = req.body.username,
+  const name = req.body.name,
+    username = req.body.username,
     email = req.body.email,
     password = req.body.password;
 
-  const parsedPayload = userSignup.safeParse({ username, email, password });
+  const parsedPayload = userSignup.safeParse({
+    name,
+    username,
+    email,
+    password,
+  });
   if (!parsedPayload.success) {
     res.status(411).json({
+      success: false,
       msg: "wrong inputs",
     });
     return;
@@ -45,9 +52,9 @@ app.post("/signup", async (req, res) => {
 
   try {
     //check if username or email exists
-    // console.log(findUser(username));
     if ((await user.findOne({ username })) || (await user.findOne({ email }))) {
       res.status(411).json({
+        success: false,
         msg: "username or email already exists",
       });
       return;
@@ -55,6 +62,7 @@ app.post("/signup", async (req, res) => {
 
     //create new user
     await user.create({
+      name: name,
       username: username,
       email: email,
       password: hashPassword,
@@ -62,12 +70,13 @@ app.post("/signup", async (req, res) => {
 
     const token = jwtTokenGenerate(username);
     res.status(200).json({
+      success: true,
       msg: "signup successful",
       token,
     });
     return;
   } catch (err) {
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ success: false, error: "Internal server error" });
     return;
   }
 });
@@ -81,6 +90,7 @@ app.post("/signin", async (req, res) => {
 
   if (!parsedPayload.success) {
     res.status(411).json({
+      success: false,
       msg: "wrong inputs",
     });
     return;
@@ -91,6 +101,7 @@ app.post("/signin", async (req, res) => {
     const findUser = await user.findOne({ username });
     if (!findUser) {
       res.status(411).json({
+        success: false,
         msg: "user does not exist",
       });
       return;
@@ -99,6 +110,7 @@ app.post("/signin", async (req, res) => {
     //match password with hashPassword
     if (!(await argon2.verify(findUser.password, password))) {
       res.status(411).json({
+        success: false,
         msg: "incorrect password",
       });
       return;
@@ -106,12 +118,13 @@ app.post("/signin", async (req, res) => {
 
     const token = jwtTokenGenerate(username);
     res.status(200).json({
+      success: true,
       msg: "sign in successful",
       token,
     });
     return;
   } catch (err) {
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ success: false, error: "Internal server error" });
     return;
   }
 });
@@ -125,7 +138,7 @@ app.get("/post", async (req, res) => {
     const username = decoded.username;
 
     if (!(await user.findOne({ username }))) {
-      res.status(411).json({ error: "user does not exists" });
+      res.status(411).json({ success: false, error: "user does not exists" });
       return;
     }
 
@@ -134,10 +147,10 @@ app.get("/post", async (req, res) => {
       .find()
       .skip(req.body.skipCount * 5)
       .limit(5);
-    res.status(200).json({ posts });
+    res.status(200).json({ success: true, posts });
     return;
   } catch (err) {
-    res.status(403).json({ msg: "Invalid Token" });
+    res.status(403).json({ success: true, msg: "Invalid Token" });
   }
 });
 
