@@ -1,13 +1,18 @@
+import { useNavigate } from "react-router-dom";
+
 const PageBody = ({
   handelName,
   handelUsername,
   handelEmail,
   handelPassword,
+  onSubmit,
 }) => {
+  // const navigate = useNavigate();
+
   return (
     <div>
       <div className="card rounded-lg w-80 bg-base-200 shadow-2xl shadow-gray-500/50">
-        <form className="card-body py-2.5 px-4">
+        <div className="card-body py-2.5 px-4">
           <label className="input input-bordered h-9 flex items-center gap-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -85,11 +90,14 @@ const PageBody = ({
             </label>
           </div>
           <div className="card-actions justify-center ">
-            <button className="btn btn-wide text-white bg-[#CB4154] hover:bg-[#B43041]">
+            <button
+              className="btn btn-wide text-white bg-[#CB4154] hover:bg-[#B43041]"
+              onClick={onSubmit}
+            >
               Sign Up
             </button>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );

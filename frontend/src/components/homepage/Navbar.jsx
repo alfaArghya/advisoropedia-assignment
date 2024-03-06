@@ -1,6 +1,8 @@
+import { useNavigate } from "react-router-dom";
 import "./Navbar.css";
 
 const Navbar = () => {
+  const navigate = useNavigate();
   return (
     <>
       <div className="navbar bg-transparent px-8 mx-auto w-11/12">
@@ -20,7 +22,7 @@ const Navbar = () => {
               <a>Home</a>
             </li>
             <li className="popup-text px-3 cursor-pointer hover:text-white ">
-              <a>Blog</a>
+              <a onClick={() => navigate("/posts")}>Blog</a>
             </li>
             <li className="popup-text px-3 cursor-pointer hover:text-white ">
               <a>About</a>
@@ -64,7 +66,7 @@ const Navbar = () => {
                 <a>Home</a>
               </li>
               <li className="popup-text px-3 cursor-pointer  ">
-                <a>Blog</a>
+                <a onClick={() => navigate("/posts")}>Blog</a>
               </li>
               <li className="popup-text px-3 cursor-pointer  ">
                 <a>About</a>
@@ -80,7 +82,10 @@ const Navbar = () => {
           <a className="btn btn-ghost mr-2 text-slate-100 hover:text-slate-700 hover:bg-transparent">
             Sign In
           </a>
-          <a className="btn btn-sm bg-slate-300 text-black border-transparent hover:bg-slate-700 hover:text-white hover:border-transparent">
+          <a
+            className="btn btn-sm bg-slate-300 text-black border-transparent hover:bg-slate-700 hover:text-white hover:border-transparent"
+            onClick={() => navigate("/signup")}
+          >
             Sign Up
           </a>
         </div>

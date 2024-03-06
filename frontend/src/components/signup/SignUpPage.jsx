@@ -6,27 +6,17 @@ import SingInBox from "./SingInBox";
 import Alert from "./Alert";
 
 const SignUpPage = () => {
-  // Axios.post("http://localhost:3000/signup", {
-  //   name: "User 13",
-  //   username: "user13",
-  //   email: "user13@example.com",
-  //   password: "user13@example",
-  // })
-  //   .then((res) => {
-  //     console.log(`res`);
-  //     console.log(res.data);
-  //   })
-  //   .catch((err) => {
-  //     console.log(`err`);
-  //     console.log(err.response.data);
-  //   });
-
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState({ valid: true, msg: "" });
-  const [pasword, setPassword] = useState("");
+  const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState({ valid: true, msg: "" });
+  const [signupSuccess, setSignupSuccess] = useState({
+    success: false,
+    msg: "",
+    token: "",
+  });
 
   const handelName = (event) => {
     setName(event.target.value);
@@ -88,6 +78,31 @@ const SignUpPage = () => {
     }
   };
 
+  const onSubmit = async () => {
+    await Axios.post("http://localhost:3000/signup", {
+      name: name === "" ? null : name,
+      username: username === "" ? null : username,
+      email: email === "" ? null : email,
+      password: password === "" ? null : password,
+    })
+      .then((res) => {
+        setSignupSuccess({
+          success: res.data.success,
+          msg: res.data.msg,
+          token: res.data.token,
+        });
+      })
+      .catch((err) => {
+        setSignupSuccess({
+          success: err.response.data.success,
+          msg: err.response.data.msg,
+          token: "",
+        });
+      });
+
+    console.log(signupSuccess);
+  };
+
   return (
     <div className="h-screen bg-[#131D3B]">
       <div className=" flex flex-col items-center justify-center">
@@ -97,9 +112,14 @@ const SignUpPage = () => {
           handelUsername={handelUsername}
           handelEmail={handelEmail}
           handelPassword={handelPassword}
+          onSubmit={onSubmit}
         />
         <SingInBox />
-        <Alert emailError={emailError} passwordError={passwordError} />
+        <Alert
+          emailError={emailError}
+          passwordError={passwordError}
+          signupSuccess={signupSuccess}
+        />
       </div>
     </div>
   );
