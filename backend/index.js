@@ -68,7 +68,7 @@ app.post("/signup", async (req, res) => {
       password: hashPassword,
     });
 
-    const token = jwtTokenGenerate({ name, username, email });
+    const token = jwtTokenGenerate(username);
     res.status(200).json({
       success: true,
       msg: "signup successful",
@@ -130,7 +130,7 @@ app.post("/signin", async (req, res) => {
 });
 
 //posts route
-app.get("/post", async (req, res) => {
+app.get("/posts", async (req, res) => {
   const token = req.headers.authorization;
   try {
     //decode jwt token
@@ -141,16 +141,15 @@ app.get("/post", async (req, res) => {
       res.status(411).json({ success: false, error: "user does not exists" });
       return;
     }
-
     //get posts from DB
     const posts = await post
       .find()
-      .skip(req.body.skipCount * 5)
+      .skip(req.query.skipCount * 5)
       .limit(5);
-    res.status(200).json({ success: true, posts });
+    res.status(200).json({ success: true, username: username, posts });
     return;
   } catch (err) {
-    res.status(403).json({ success: true, msg: "Invalid Token" });
+    res.status(403).json({ success: false, msg: "Invalid Token" });
   }
 });
 
