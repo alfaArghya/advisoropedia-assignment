@@ -24,7 +24,6 @@ const Alert = ({ emailError, passwordError, signupSuccess }) => {
         </div>
       );
     }
-
     if (!passwordError.valid) {
       return (
         <div role="alert" className="alert alert-warning w-80 p-2 mt-4">
@@ -45,7 +44,7 @@ const Alert = ({ emailError, passwordError, signupSuccess }) => {
         </div>
       );
     }
-    if (!signupSuccess.success) {
+    if (signupSuccess.success != null && !signupSuccess.success) {
       return (
         <>
           <div role="alert" className="alert alert-warning w-80 p-2 mt-4">
@@ -67,7 +66,6 @@ const Alert = ({ emailError, passwordError, signupSuccess }) => {
         </>
       );
     }
-
     return (
       <>
         <div role="alert" className="alert alert-success w-80 p-2 mt-4">

@@ -14,8 +14,6 @@ function App() {
           <Route path="/posts" element={<PostPage />} />
         </Routes>
       </BrowserRouter>
-
-      {/* <SignUpPage /> */}
     </>
   );
 }

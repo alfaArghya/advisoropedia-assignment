@@ -4,6 +4,7 @@ import Title from "./Title";
 import PageBody from "./PageBody";
 import SingInBox from "./SingInBox";
 import Alert from "./Alert";
+import { useNavigate } from "react-router-dom";
 
 const SignUpPage = () => {
   const [name, setName] = useState("");
@@ -13,10 +14,11 @@ const SignUpPage = () => {
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState({ valid: true, msg: "" });
   const [signupSuccess, setSignupSuccess] = useState({
-    success: false,
+    success: null,
     msg: "",
     token: "",
   });
+  const navigate = useNavigate();
 
   const handelName = (event) => {
     setName(event.target.value);
@@ -79,6 +81,8 @@ const SignUpPage = () => {
   };
 
   const onSubmit = async () => {
+    let success = false;
+    let token = "";
     await Axios.post("http://localhost:3000/signup", {
       name: name === "" ? null : name,
       username: username === "" ? null : username,
@@ -91,6 +95,8 @@ const SignUpPage = () => {
           msg: res.data.msg,
           token: res.data.token,
         });
+        success = true;
+        token = res.data.token;
       })
       .catch((err) => {
         setSignupSuccess({
@@ -98,9 +104,12 @@ const SignUpPage = () => {
           msg: err.response.data.msg,
           token: "",
         });
+        return;
       });
 
-    console.log(signupSuccess);
+    if (success) {
+      navigate("/posts", { state: { token: token } });
+    }
   };
 
   return (
