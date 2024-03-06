@@ -68,7 +68,7 @@ app.post("/signup", async (req, res) => {
       password: hashPassword,
     });
 
-    const token = jwtTokenGenerate(username);
+    const token = jwtTokenGenerate({ name, username, email });
     res.status(200).json({
       success: true,
       msg: "signup successful",
