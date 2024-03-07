@@ -3,6 +3,7 @@ import Axios from "axios";
 import { useLocation } from "react-router-dom";
 import Navbar from "./Navbar";
 import InteractionBtn from "./InteractionBtn";
+import EmailVerify from "./EmailVerify";
 
 const PostPage = () => {
   const location = useLocation();
@@ -12,6 +13,9 @@ const PostPage = () => {
   const [skipCount, setSkipCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const loaderRef = useRef(null);
+  const [showEmailVerify, setShowEmailVerify] = useState(
+    location.state.showEmailVerify
+  );
 
   useEffect(() => {
     setLoading(true);
@@ -66,34 +70,48 @@ const PostPage = () => {
     "https://advisoropedia.in/wp-content/uploads/2024/02/Affordable-homes-in-thriving-communities-8-1024x576.png",
   ];
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowEmailVerify(false);
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, []);
   return (
     <>
-      <Navbar username={username} />
-      <div className="flex flex-col items-center justify-center">
-        {posts.map((post) => {
-          return (
-            <div
-              key={post._id}
-              className="card w-96 bg-base-100 shadow-xl my-5 pb-4"
-            >
-              <figure>
-                <img src={images[Math.floor(Math.random() * 5)]} alt="img" />
-              </figure>
-              <div className="card-body">
-                <h2 className="card-title">{post.title}</h2>
-                <p>{post.content}</p>
-                <div className="card-actions justify-end"></div>
+      {showEmailVerify ? (
+        <EmailVerify />
+      ) : (
+        <span className="hidden -z-50"></span>
+      )}
+      <div className="w-full">
+        <Navbar username={username} />
+        <div className="flex flex-col items-center justify-center">
+          {posts.map((post) => {
+            return (
+              <div
+                key={post._id}
+                className="card w-96 bg-base-100 shadow-xl my-5 pb-4"
+              >
+                <figure>
+                  <img src={images[Math.floor(Math.random() * 5)]} alt="img" />
+                </figure>
+                <div className="card-body">
+                  <h2 className="card-title">{post.title}</h2>
+                  <p>{post.content}</p>
+                  <div className="card-actions justify-end"></div>
+                </div>
+                <InteractionBtn />
               </div>
-              <InteractionBtn />
+            );
+          })}
+          {loading && (
+            <div className="h-screen flex items-center justify-center">
+              <span className="loading loading-spinner loading-lg"></span>
             </div>
-          );
-        })}
-        {loading && (
-          <div className="h-screen flex items-center justify-center">
-            <span className="loading loading-spinner loading-lg"></span>
-          </div>
-        )}
-        <div ref={loaderRef}></div>
+          )}
+          <div ref={loaderRef}></div>
+        </div>
       </div>
     </>
   );
