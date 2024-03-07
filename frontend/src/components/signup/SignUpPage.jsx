@@ -1,8 +1,8 @@
 import Axios from "axios";
 import { useState } from "react";
-import Title from "./Title";
+import Title from "../utils/Title";
 import PageBody from "./PageBody";
-import SingInBox from "./SingInBox";
+import SignInBox from "./SignInBox";
 import Alert from "./Alert";
 import { useNavigate } from "react-router-dom";
 
@@ -115,7 +115,7 @@ const SignUpPage = () => {
   return (
     <div className="h-screen bg-[#131D3B]">
       <div className=" flex flex-col items-center justify-center">
-        <Title />
+        <Title description="Want To Know More? Sign Up here" />
         <PageBody
           handelName={handelName}
           handelUsername={handelUsername}
@@ -123,7 +123,7 @@ const SignUpPage = () => {
           handelPassword={handelPassword}
           onSubmit={onSubmit}
         />
-        <SingInBox />
+        <SignInBox />
         <Alert
           emailError={emailError}
           passwordError={passwordError}
