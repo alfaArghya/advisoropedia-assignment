@@ -21,9 +21,7 @@ const Navbar = () => {
             <li className="popup-text px-3 cursor-pointer hover:text-white ">
               <a>Home</a>
             </li>
-            <li className="popup-text px-3 cursor-pointer hover:text-white ">
-              <a onClick={() => navigate("/posts")}>Blog</a>
-            </li>
+
             <li className="popup-text px-3 cursor-pointer hover:text-white ">
               <a>About</a>
             </li>
@@ -66,9 +64,6 @@ const Navbar = () => {
                 <a>Home</a>
               </li>
               <li className="popup-text px-3 cursor-pointer  ">
-                <a onClick={() => navigate("/posts")}>Blog</a>
-              </li>
-              <li className="popup-text px-3 cursor-pointer  ">
                 <a>About</a>
               </li>
               <li className="popup-text px-3 cursor-pointer  ">
@@ -79,7 +74,10 @@ const Navbar = () => {
               </li>
             </ul>
           </div>
-          <a className="btn btn-ghost mr-2 text-slate-100 hover:text-slate-700 hover:bg-transparent">
+          <a
+            className="btn btn-ghost mr-2 text-slate-100 hover:text-slate-700 hover:bg-transparent"
+            onClick={() => navigate("/signin")}
+          >
             Sign In
           </a>
           <a
