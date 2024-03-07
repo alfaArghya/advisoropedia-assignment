@@ -7,6 +7,7 @@ import EmailVerify from "./EmailVerify";
 
 const PostPage = () => {
   //react states
+  const location = useLocation();
   const token = location.state.token;
   const [username, setUsername] = useState("");
   const [posts, setPosts] = useState([]);
@@ -16,8 +17,6 @@ const PostPage = () => {
   const [showEmailVerify, setShowEmailVerify] = useState(
     location.state.showEmailVerify
   );
-
-  const location = useLocation();
 
   //fetching posts from server
   useEffect(() => {
