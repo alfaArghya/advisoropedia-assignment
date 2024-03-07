@@ -1,10 +1,13 @@
 import { useEffect, useState, useRef } from "react";
 import Axios from "axios";
 import { useLocation } from "react-router-dom";
+import Navbar from "./Navbar";
+import InteractionBtn from "./InteractionBtn";
 
 const PostPage = () => {
   const location = useLocation();
   const token = location.state.token;
+  const [username, setUsername] = useState("");
   const [posts, setPosts] = useState([]);
   const [skipCount, setSkipCount] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -18,6 +21,7 @@ const PostPage = () => {
       },
     })
       .then((res) => {
+        setUsername(res.data.username);
         setPosts((prevPosts) => [...prevPosts, ...res.data.posts]);
         setLoading(false);
       })
@@ -63,28 +67,35 @@ const PostPage = () => {
   ];
 
   return (
-    <div className="flex flex-col items-center">
-      {posts.map((post) => {
-        return (
-          <div key={post._id} className="card w-96 bg-base-100 shadow-xl my-5">
-            <figure>
-              <img src={images[Math.floor(Math.random() * 5)]} alt="img" />
-            </figure>
-            <div className="card-body">
-              <h2 className="card-title">{post.title}</h2>
-              <p>{post.content}</p>
-              <div className="card-actions justify-end"></div>
+    <>
+      <Navbar username={username} />
+      <div className="flex flex-col items-center justify-center">
+        {posts.map((post) => {
+          return (
+            <div
+              key={post._id}
+              className="card w-96 bg-base-100 shadow-xl my-5 pb-4"
+            >
+              <figure>
+                <img src={images[Math.floor(Math.random() * 5)]} alt="img" />
+              </figure>
+              <div className="card-body">
+                <h2 className="card-title">{post.title}</h2>
+                <p>{post.content}</p>
+                <div className="card-actions justify-end"></div>
+              </div>
+              <InteractionBtn />
             </div>
+          );
+        })}
+        {loading && (
+          <div className="h-screen flex items-center justify-center">
+            <span className="loading loading-spinner loading-lg"></span>
           </div>
-        );
-      })}
-      {loading && (
-        <div className="h-screen flex items-center justify-center">
-          <span className="loading loading-spinner loading-lg"></span>
-        </div>
-      )}
-      <div ref={loaderRef}></div>
-    </div>
+        )}
+        <div ref={loaderRef}></div>
+      </div>
+    </>
   );
 };
 

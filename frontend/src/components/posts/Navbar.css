@@ -1,0 +1,8 @@
+@media (max-width: 450px) {
+  .navbar-center {
+    display: none;
+  }
+  .card {
+    width: 20rem;
+  }
+}
