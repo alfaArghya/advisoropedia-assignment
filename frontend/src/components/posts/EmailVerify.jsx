@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+
 const EmailVerify = () => {
   return (
     <div className="flex flex-col items-center justify-center">

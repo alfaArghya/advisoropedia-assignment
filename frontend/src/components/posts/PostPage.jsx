@@ -6,7 +6,7 @@ import InteractionBtn from "./InteractionBtn";
 import EmailVerify from "./EmailVerify";
 
 const PostPage = () => {
-  const location = useLocation();
+  //react states
   const token = location.state.token;
   const [username, setUsername] = useState("");
   const [posts, setPosts] = useState([]);
@@ -17,6 +17,9 @@ const PostPage = () => {
     location.state.showEmailVerify
   );
 
+  const location = useLocation();
+
+  //fetching posts from server
   useEffect(() => {
     setLoading(true);
     Axios.get(`http://localhost:3000/posts?skipCount=${skipCount}`, {
@@ -33,7 +36,7 @@ const PostPage = () => {
         console.log(err.response.data);
         setLoading(false);
       });
-  }, [skipCount, token]);
+  }, [skipCount, token]); //dependencies
 
   // Intersection Observer to detect when loaderRef is in viewport
   useEffect(() => {
@@ -62,6 +65,7 @@ const PostPage = () => {
     };
   }, [loading]);
 
+  //stock images
   const images = [
     "https://advisoropedia.in/wp-content/uploads/2024/02/Affordable-homes-in-thriving-communities-2.png",
     "https://advisoropedia.in/wp-content/uploads/2024/02/Affordable-homes-in-thriving-communities-4-1024x576.png",
@@ -70,6 +74,7 @@ const PostPage = () => {
     "https://advisoropedia.in/wp-content/uploads/2024/02/Affordable-homes-in-thriving-communities-8-1024x576.png",
   ];
 
+  //vanish verify email pop-up
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowEmailVerify(false);
@@ -77,6 +82,7 @@ const PostPage = () => {
 
     return () => clearTimeout(timer);
   }, []);
+
   return (
     <>
       {showEmailVerify ? (

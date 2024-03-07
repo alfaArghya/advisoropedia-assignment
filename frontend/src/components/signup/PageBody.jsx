@@ -1,5 +1,3 @@
-import { useNavigate } from "react-router-dom";
-
 const PageBody = ({
   handelName,
   handelUsername,
@@ -7,11 +5,9 @@ const PageBody = ({
   handelPassword,
   onSubmit,
 }) => {
-  // const navigate = useNavigate();
-
   return (
     <div>
-      <div className="card rounded-lg w-80 bg-base-200 shadow-2xl shadow-gray-500/50">
+      <div className="card rounded-lg w-80 bg-base-200 shadow-2xl shadow-gray-500/50 mt-2">
         <div className="card-body py-2.5 px-4">
           <label className="input input-bordered h-9 flex items-center gap-2">
             <svg

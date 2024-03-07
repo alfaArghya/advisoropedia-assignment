@@ -7,6 +7,7 @@ import Alert from "./Alert";
 import { useNavigate } from "react-router-dom";
 
 const SignUpPage = () => {
+  //react states
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -18,8 +19,10 @@ const SignUpPage = () => {
     msg: "",
     token: "",
   });
+
   const navigate = useNavigate();
 
+  //handel all states
   const handelName = (event) => {
     setName(event.target.value);
   };
@@ -80,6 +83,7 @@ const SignUpPage = () => {
     }
   };
 
+  // submit data to server
   const onSubmit = async () => {
     let success = false;
     let token = "";
@@ -108,14 +112,14 @@ const SignUpPage = () => {
       });
 
     if (success) {
-      navigate("/posts", { state: { token: token } });
+      navigate("/posts", { state: { token: token, showEmailVerify: true } });
     }
   };
 
   return (
     <div className="h-screen bg-[#131D3B]">
       <div className=" flex flex-col items-center justify-center">
-        <Title description="Want To Know More? Sign Up here" />
+        <Title description="Kickstart your journey with us! Sign Up here" />
         <PageBody
           handelName={handelName}
           handelUsername={handelUsername}

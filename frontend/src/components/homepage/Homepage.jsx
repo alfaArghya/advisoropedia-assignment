@@ -1,4 +1,5 @@
 import Navbar from "./Navbar";
+
 const Homepage = () => {
   return (
     <div>
@@ -7,6 +8,7 @@ const Homepage = () => {
   );
 };
 
+//1st page
 const Page1 = () => {
   return (
     <div
@@ -18,7 +20,7 @@ const Page1 = () => {
         backgroundPosition: "center",
         height: "30rem",
       }}
-      className=""
+      className="shadow-xl"
     >
       <Navbar />
       <div className="w-10/12 pl-8 mx-auto">
@@ -32,5 +34,7 @@ const Page1 = () => {
     </div>
   );
 };
+
+//2nd page
 
 export default Homepage;

@@ -7,6 +7,7 @@ import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const SignInPage = () => {
+  //react states
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState({ valid: true, msg: "" });
@@ -15,8 +16,10 @@ const SignInPage = () => {
     msg: "",
     token: "",
   });
+
   const navigate = useNavigate();
 
+  //handel states
   const handelUsername = (event) => {
     setUsername(event.target.value);
   };
@@ -61,6 +64,7 @@ const SignInPage = () => {
     }
   };
 
+  // submit data to server
   const onSubmit = async () => {
     let success = false;
     let token = "";
@@ -87,7 +91,7 @@ const SignInPage = () => {
       });
 
     if (success) {
-      navigate("/posts", { state: { token: token } });
+      navigate("/posts", { state: { token: token, showEmailVerify: false } });
     }
   };
 

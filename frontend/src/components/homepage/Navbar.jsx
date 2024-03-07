@@ -3,9 +3,10 @@ import "./Navbar.css";
 
 const Navbar = () => {
   const navigate = useNavigate();
+
   return (
     <>
-      <div className="navbar bg-transparent px-8 mx-auto w-11/12">
+      <div className="nav navbar bg-transparent px-8 mx-auto w-11/12">
         <div className="navbar-start">
           <a className="cursor-pointer">
             <img

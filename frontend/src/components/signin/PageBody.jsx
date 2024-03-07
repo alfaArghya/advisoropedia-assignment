@@ -1,6 +1,6 @@
 const PageBody = ({ handelUsername, handelPassword, onSubmit }) => {
   return (
-    <div className="card rounded-lg w-80 bg-base-200 shadow-2xl shadow-gray-500/50">
+    <div className="card rounded-lg w-80 bg-base-200 shadow-2xl shadow-gray-500/50 mt-2">
       <div className="card-body py-2.5 px-4">
         <label className="input input-bordered h-9 flex items-center gap-2">
           <svg
@@ -47,6 +47,12 @@ const PageBody = ({ handelUsername, handelPassword, onSubmit }) => {
           >
             Sign In
           </button>
+          <a
+            href="#"
+            className="text-[#B43041] font-semibold hover:underline decoration-[#B43041] "
+          >
+            Forgot Password?
+          </a>
         </div>
       </div>
     </div>

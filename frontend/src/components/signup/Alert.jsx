@@ -4,6 +4,7 @@ const Alert = ({ emailError, passwordError, signupSuccess }) => {
       return <></>;
     }
 
+    //not a valid email
     if (!emailError.valid) {
       return (
         <div role="alert" className="alert alert-warning w-80 p-2 mt-4">
@@ -24,6 +25,8 @@ const Alert = ({ emailError, passwordError, signupSuccess }) => {
         </div>
       );
     }
+
+    //not a valid password
     if (!passwordError.valid) {
       return (
         <div role="alert" className="alert alert-warning w-80 p-2 mt-4">
@@ -44,6 +47,8 @@ const Alert = ({ emailError, passwordError, signupSuccess }) => {
         </div>
       );
     }
+
+    //can't sign up
     if (signupSuccess.success != null && !signupSuccess.success) {
       return (
         <>
@@ -66,6 +71,7 @@ const Alert = ({ emailError, passwordError, signupSuccess }) => {
         </>
       );
     }
+
     return (
       <>
         <div role="alert" className="alert alert-success w-80 p-2 mt-4">
